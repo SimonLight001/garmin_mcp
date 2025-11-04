@@ -87,6 +87,7 @@ def register_tools(app):
                 return {"error": f"Upload failed with status {response.status_code}"}
             
     except Exception as e:
+        print(f"Error uploading workout: {str(e)}", file=sys.stderr)
         return {"error": f"Error uploading workout: {str(e)}"}
             
     @app.tool()
