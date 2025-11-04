@@ -86,9 +86,9 @@ def register_tools(app):
             else:
                 return {"error": f"Upload failed with status {response.status_code}"}
             
-    except Exception as e:
-        print(str(e), file=sys.stderr)
-        return {"error": f"Error uploading workout: {str(e)}"}
+        except Exception as e:
+            print(str(e), file=sys.stderr)
+            return {"error": f"Error uploading workout: {str(e)}"}
             
     @app.tool()
     async def upload_activity(file_path: str) -> str:
