@@ -61,7 +61,7 @@ def register_tools(app):
             return f"Error downloading workout: {str(e)}"
     
     @app.tool()
-    async def upload_workout(workout_json: Union[str, Dict[str, Any]]) -> Dict[str, Any]:
+    async def upload_workout(self, workout_json: Union[str, Dict[str, Any]]) -> Dict[str, Any]:
         """Upload a workout from JSON data
         
         Args:
@@ -71,11 +71,23 @@ def register_tools(app):
             workout_data = json.loads(workout_json)
         else:
             workout_data = workout_json
+        
         try:
-            result = garmin_client.upload_workout(workout_data)
-            return result
-        except Exception as e:
-            return f"Error uploading workout: {str(e)}"
+            # Use the direct API endpoint for workout upload
+            url = "https://connect.garmin.com/modern/proxy/workout-service/workout"
+            
+            response = self.garmin_client.modern_rest_client.post(
+                url,
+                json=workout_data
+            )
+            
+            if response.status_code == 200 or response.status_code == 201:
+                return response.json()
+            else:
+                return {"error": f"Upload failed with status {response.status_code}"}
+            
+    except Exception as e:
+        return {"error": f"Error uploading workout: {str(e)}"}
             
     @app.tool()
     async def upload_activity(file_path: str) -> str:
