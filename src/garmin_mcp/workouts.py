@@ -61,7 +61,7 @@ def register_tools(app):
             return f"Error downloading workout: {str(e)}"
     
     @app.tool()
-    def upload_workout(self, workout_json: Union[str, Dict[str, Any]]) -> Dict[str, Any]:
+    async def upload_workout(workout_json: Union[str, Dict[str, Any]]) -> Dict[str, Any]:
         """Upload a workout from JSON data
         
         Args:
